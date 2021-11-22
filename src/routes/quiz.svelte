@@ -1,20 +1,18 @@
 <script>
-  import Info from '$lib/data/info.json'
-  import Values from '$lib/data/values.json'
-  import Questions from '$lib/data/questions.json'
-  import converter from "number-to-words"
-  import { goto } from '$app/navigation'
+  import Info from '$lib/data/info.json';
+  import Values from '$lib/data/values.json';
+  import Questions from '$lib/data/questions.json';
 
   const {
     name
   } = Info;
 
   const {
-    values,
+    values
   } = Values;
 
   const {
-    questions,
+    questions
   } = Questions;
 
   function shuffle(array) {
@@ -25,50 +23,50 @@
     return array;
   }
 
-  const randomizedQuestions = shuffle(questions)
+  const randomizedQuestions = shuffle(questions);
 
-  let questionNumber = 0
-  $: questionText = randomizedQuestions[questionNumber].question
+  let questionNumber = 0;
+  $: questionText = randomizedQuestions[questionNumber].question;
   $: firstQuestion = questionNumber <= 0;
 
-  let maxes = {}
-  let results = {}
-  for(const {slug} of values) {
+  let maxes = {};
+  let results = {};
+  for (const { slug } of values) {
     maxes[slug] = 0;
-    results[slug] = Array(questions.length)
+    results[slug] = Array(questions.length);
   }
 
-  for(const question of randomizedQuestions) {
-    for(const [slug, value] of Object.entries(question.effect)) {
-      maxes[slug] += Math.abs(value)
+  for (const question of randomizedQuestions) {
+    for (const [slug, value] of Object.entries(question.effect)) {
+      maxes[slug] += Math.abs(value);
     }
   }
 
   function nextQuestion(multiplier) {
 
-    const questionEffect = randomizedQuestions[questionNumber].effect
+    const questionEffect = randomizedQuestions[questionNumber].effect;
 
-    for(const [slug, value] of Object.entries(questionEffect)) {
-      results[slug][questionNumber] = value * multiplier
+    for (const [slug, value] of Object.entries(questionEffect)) {
+      results[slug][questionNumber] = value * multiplier;
     }
-    console.log(results)
+    console.log(results);
 
-    questionNumber += 1
+    questionNumber += 1;
     if (questionNumber < questions.length) {
-      calcResults()
+      calcResults();
     }
   }
 
   function calcResults() {
-    let results = {}
-    for(const [slug, subresult] in Object.entries(results)) {
-      results[slug] = subresult.reduce((acc, value) => acc += (value ? value : 0))
+    let results = {};
+    for (const [slug, subresult] in Object.entries(results)) {
+      results[slug] = subresult.reduce((acc, value) => acc += (value ? value : 0));
     }
   }
 
   function previousQuestion() {
     if (!firstQuestion) {
-      questionNumber -= 1
+      questionNumber -= 1;
     }
   }
 

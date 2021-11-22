@@ -1,21 +1,21 @@
-<script lang="ts">
-	import '../app.css';
+<script lang='ts'>
+  import '../app.css';
   import GithubCorner from '$lib/GithubCorner.svelte';
-  import Info from '$lib/data/info.json'
+  import Info from '$lib/data/info.json';
 
   const {
-    name,
+    name
   } = Info;
 </script>
 
-<GithubCorner/>
+<GithubCorner />
 <h1>
   {name}
 </h1>
 <hr>
 
 <main>
-	<slot />
+  <slot />
 </main>
 
 

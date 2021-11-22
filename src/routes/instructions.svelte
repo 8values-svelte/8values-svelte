@@ -1,6 +1,6 @@
 <script>
-  import Info from '$lib/data/info.json'
-  import { goto } from '$app/navigation'
+  import Info from '$lib/data/info.json';
+  import { goto } from '$app/navigation';
 
   const {
     instructions

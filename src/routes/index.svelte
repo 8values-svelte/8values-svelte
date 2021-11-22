@@ -1,27 +1,27 @@
-<script context="module" lang="ts">
+<script context='module' lang='ts'>
   import { browser } from '$app/env';
 
   export const router = browser;
-	export const prerender = true;
+  export const prerender = true;
 </script>
 
-<script lang="ts">
-  import Info from '$lib/data/info.json'
-  import Values from '$lib/data/values.json'
-  import Questions from '$lib/data/questions.json'
-  import converter from "number-to-words"
-  import { goto } from '$app/navigation'
+<script lang='ts'>
+  import Info from '$lib/data/info.json';
+  import Values from '$lib/data/values.json';
+  import Questions from '$lib/data/questions.json';
+  import converter from 'number-to-words';
+  import { goto } from '$app/navigation';
 
   const {
     name,
     description,
     typeOfQuiz,
     repo,
-    contact,
+    contact
   } = Info;
 
   const {
-    values,
+    values
   } = Values;
 
   const {
@@ -30,23 +30,23 @@
 
   const names = values
     .map(value => {
-      const name = value.name
-      return name[0].toUpperCase() + name.slice(1)
-    })
+      const name = value.name;
+      return name[0].toUpperCase() + name.slice(1);
+    });
 
-  const namesList = names.slice(0, -1).join(', ') + ' and ' + names.slice(-1)
+  const namesList = names.slice(0, -1).join(', ') + ' and ' + names.slice(-1);
 
-  const numAxes = converter.toWords(values.length)
-  const numValues = converter.toWords(values.length * 2)
+  const numAxes = converter.toWords(values.length);
+  const numValues = converter.toWords(values.length * 2);
 
 </script>
 
 <svelte:head>
-	<title>{name}</title>
+  <title>{name}</title>
 </svelte:head>
 
 <div class='center icons_box'>
-  {#each values as {name, leftValue, rightValue}}
+  {#each values as { name, leftValue, rightValue }}
     <div class='icons_column'>
       <div class='icons_header'>
         {name.toUpperCase()}
@@ -92,7 +92,7 @@
   They are:
 </p>
 <div class='explanation_bg'>
-  {#each values as {name, leftValue, rightValue}}
+  {#each values as { name, leftValue, rightValue }}
     <div class='spacer'>
       <div class='explanation_blurb_left'>
         <p class='value' style={'color:' + leftValue.color}>
@@ -106,7 +106,7 @@
         <p class='axis_name'>
           {name.toUpperCase()}
         </p>
-        <img class='arrow' src='double_arrow.svg' alt='double ended arrow'/>
+        <img class='arrow' src='double_arrow.svg' alt='double ended arrow' />
       </div>
       <div class='explanation_blurb_right'>
         <p class='value' style={'color:' + rightValue.color}>
@@ -131,19 +131,19 @@
 <h2>I don't like my scores!</h2>
 <p>
   ¯\_(ツ)_/¯
-  <br/>
+  <br />
   If you have any suggestions or constructive criticism, feel free to contact us!
 <p>
-  <ul>
+<ul>
+  <li>
+    Email: <a href={'mailto:' + contact.email}>{contact.email}</a>
+  </li>
+  {#if (contact.github)}
     <li>
-      Email: <a href={'mailto:' + contact.email}>{contact.email}</a>
+      Github: <a href={'https://github.com/' + contact.github}>@{contact.github}</a>
     </li>
-    {#if (contact.github)}
-      <li>
-        Github: <a href={'https://github.com/' + contact.github}>@{contact.github}</a>
-      </li>
-    {/if}
-  </ul>
+  {/if}
+</ul>
 
 <p>
   or open an issue on the Github Repository here: <a href={repo}>Github Page</a>
