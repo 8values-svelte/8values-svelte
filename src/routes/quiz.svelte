@@ -2,6 +2,7 @@
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
   import Questions from '$lib/data/questions.json';
+  import { goto } from '$app/navigation';
 
   const {
     name
@@ -52,7 +53,7 @@
     console.log(results);
 
     questionNumber += 1;
-    if (questionNumber < questions.length) {
+    if (questionNumber >= questions.length) {
       calcResults();
     }
   }
@@ -60,8 +61,10 @@
   function calcResults() {
     let results = {};
     for (const [slug, subresult] in Object.entries(results)) {
-      results[slug] = subresult.reduce((acc, value) => acc += (value ? value : 0));
+      let total = subresult.reduce((acc, value) => acc += (value ? value : 0), 0);
+      results[slug] = (100 * (maxes[slug] + total) / (2 * maxes[slug])).toFixed(1);
     }
+    goto('/results')
   }
 
   function previousQuestion() {
@@ -86,7 +89,7 @@
 <button class='disagree' on:click={() => nextQuestion(-0.5)}>Disagree</button>
 <button class='stronglyDisagree' on:click={() => nextQuestion(-1)}>Strongly Disagree</button>
 <button class='neutral' on:click={() => nextQuestion(0)}>Don't Know/Understand</button>
-<button class={'small_button' + (firstQuestion && ' small_button_disabled')} on:click={previousQuestion}>Back</button>
+<button class='small_button' class:small_button_disabled={firstQuestion} on:click={previousQuestion}>Back</button>
 
 <style>
   .small_button {
@@ -94,7 +97,6 @@
     font-family: 'Montserrat', sans-serif;
     border: none;
     border-radius: 8pt;
-    color: white;
     padding: 8pt;
     width: 10%;
     min-width: 100pt;
