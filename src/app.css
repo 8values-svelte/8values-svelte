@@ -1,0 +1,117 @@
+@import '@fontsource/fira-mono';
+
+:root {
+	font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--font-mono: 'Fira Mono', monospace;
+	--pure-white: #ffffff;
+	--primary-color: #b9c6d2;
+	--secondary-color: #d0dde9;
+	--tertiary-color: #edf0f8;
+	--accent-color: #ff3e00;
+	--heading-color: rgba(0, 0, 0, 0.7);
+	--text-color: #444444;
+	--background-without-opacity: rgba(255, 255, 255, 0.7);
+	--column-width: 42rem;
+	--column-margin-top: 4rem;
+}
+
+html {
+  background-color: #bbbbbb;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 80%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2em;
+  background-color: #dddddd;
+  border-color: #eeeeee;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-width: 20px;
+}
+
+p {
+  color: #444444;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18.5pt;
+  line-height: 1.15;
+  margin: 4pt;
+}
+
+h1 {
+  color: #222222;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 72pt;
+  text-align: center;
+  line-height: 72pt;
+  margin: 0;
+}
+
+h2 {
+  color: #333333;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34pt;
+  line-height: 36pt;
+  margin-top: 12pt;
+  margin-bottom: 10pt;
+}
+
+button {
+  background-color: #2196F3;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  border-radius: 8pt;
+  color: white;
+  padding: 8pt;
+  width: 50%;
+  min-width: 500pt;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 24pt;
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+button:hover, button:focus {
+  background: #1687E0;
+}
+
+.stronglyAgree { background: #1b5e20; }
+.stronglyAgree:hover, .stronglyAgree:focus { background: #154a19; }
+.agree { background: #4caf50; }
+.agree:hover, .agree:focus { background: #29942e; }
+.neutral { background: #949494; }
+.neutral:hover, .neutral:focus { background: #656565; }
+.disagree { background: #f44336; }
+.disagree:hover, .disagree:focus { background: #d6271a; }
+.stronglyDisagree { background: #b71c1c; }
+.stronglyDisagree:hover, .stronglyDisagree:focus { background: #a00e0e; }
+
+ul, li {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18.5pt;
+  color: #444444;
+}
+
+.question {
+  margin: 16pt auto;
+  color: #333333;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: normal;
+  width: 70%;
+  min-width: 500pt;
+  min-height: 144pt;
+  background-color: #eeeeee;
+  padding: 16pt;
+  border-radius: 16pt;
+  font-size: 36pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

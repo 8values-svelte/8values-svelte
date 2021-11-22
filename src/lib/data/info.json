@@ -1,0 +1,11 @@
+{
+  "name": "8values-svelte",
+  "description": "8values is, in essence, a political quiz that attempts to assign percentages for eight different political values.",
+  "instructions": "Test Instructions",
+  "repo": "https://github.com/8values/8values.github.io",
+  "typeOfQuiz": "political",
+  "contact": {
+    "email": "actioninja@criticalaction.net",
+    "github": "actioninja"
+  }
+}
