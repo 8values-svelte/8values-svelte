@@ -1,4 +1,7 @@
 import preprocess from 'svelte-preprocess';
+import staticAdapter from '@sveltejs/adapter-static';
+
+const dev = process.env.NODE_ENV === 'development';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -7,6 +10,10 @@ const config = {
   preprocess: preprocess(),
 
   kit: {
+    adapter: staticAdapter({}),
+    paths: {
+      base: dev ? '' : '/8values-svelte',
+    },
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte'
   }
