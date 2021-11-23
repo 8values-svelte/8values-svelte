@@ -2,6 +2,7 @@
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
   import Questions from '$lib/data/questions.json';
+  import { resultsStore } from '$lib/resultsStore'
   import { goto } from '$app/navigation';
 
   const {
@@ -64,7 +65,9 @@
       let total = subresult.reduce((acc, value) => acc += (value ? value : 0), 0);
       results[slug] = (100 * (maxes[slug] + total) / (2 * maxes[slug])).toFixed(1);
     }
-    goto('/results')
+    resultsStore.set(results);
+    const query = '?' + Object.entries(results).map(([slug, value]) => slug + '=' + value).join('&');
+    goto('/results' + query);
   }
 
   function previousQuestion() {

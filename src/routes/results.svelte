@@ -1,7 +1,8 @@
 <script>
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
-  import Questions from '$lib/data/questions.json';
+  import Ideologies from '$lib/data/idealogies.json'
+  import { resultsStore } from '$lib/resultsStore'
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
@@ -14,17 +15,75 @@
   } = page;
 
   let results = {}
+  let complimentResults = {}
+  for(const value of values) {
+    results[value.slug] = "50.0"
+  }
+  if(Object.keys($resultsStore).length !== 0) {
+    results = $resultsStore;
+  }
   if(query) {
     for (const [key, value] of query) {
       results[key] = value;
     }
   }
-  console.log(results)
-  console.log('query', query)
+
+  for(const [slug, value] of Object.entries(results)) {
+    complimentResults[slug] = (100 - parseFloat(value)).toFixed(1);
+  }
 
   const {
     name,
+    contact,
   } = Info;
+
+  function getLabel(labels, value) {
+    if (value > 100) {
+      return ""
+    } else if (value > 90) {
+      return labels[0]
+    } else if (value > 75) {
+      return labels[1]
+    } else if (value > 60) {
+      return labels[2]
+    } else if (value >= 40) {
+      return labels[3]
+    } else if (value >= 25) {
+      return labels[4]
+    } else if (value >= 10) {
+      return labels[5]
+    } else if (value >= 0) {
+      return labels[6]
+    } else {
+      return ""
+    }
+  }
+
+  const {
+    ideologies
+  } = Ideologies;
+
+  async function calculateIdeology() {
+    let ideology = "";
+    let lowestDistance = Infinity;
+    for(const {name, stats} of ideologies) {
+      let dist = 0;
+
+      for(const {slug, weight} of values) {
+        dist += Math.pow(Math.abs(stats[slug] - results[slug]), weight)
+      }
+
+      if (dist < lowestDistance) {
+        ideology = name;
+        lowestDistance = dist;
+      }
+    }
+    return ideology;
+  }
+
+  async function generateImage() {
+    const c = document.createElement("canvas")
+  }
 </script>
 
 <svelte:head>
@@ -33,27 +92,49 @@
 
 <h1>Results</h1>
 
-{#each values as {slug, name, leftValue, rightValue}}
-  <h2>{name[0].toUpperCase() + name.slice(1)} Axis: <span class='weight-300'>{'result'}</span></h2>
+{#each values as {slug, name, labels, leftValue, rightValue}}
+  <h2>{name[0].toUpperCase() + name.slice(1)} Axis: <span style='font-weight: 300'>{getLabel(labels, parseFloat(results[slug]))}</span></h2>
   <div class='axis'>
     <img class='icon' src="icons/{leftValue.name}.svg" alt={leftValue.name} />
-    <div class='bar' style="border-right-style: solid; background-color: {leftValue.color}"><div class='text_wrapper'>{results[slug]}%</div></div>
-    <div class='bar' style="border-left-style: solid; text-align: right; background-color: {rightValue.color}"><div class='text_wrapper'>{'50'}%</div></div>
+    <div class='bar' style="border-right-style: solid; background-color: {leftValue.color}; width: {results[slug]}%">
+      {#if (parseFloat(results[slug]) >= 6)}
+        <div class='text_wrapper'>{results[slug]}%</div>
+      {/if}
+    </div>
+    <div
+      class='bar'
+      style="border-left-style: solid; text-align: right; background-color: {rightValue.color}; width: {complimentResults[slug]}%"
+    >
+      {#if (parseFloat(complimentResults[slug]) >= 6)}
+        <div class='text_wrapper'>{complimentResults[slug]}%</div>
+      {/if}
+    </div>
     <img class='icon' src="icons/{rightValue.name}.svg" alt={rightValue.name} />
   </div>
 {/each}
-<h2>Closest Match:</h2>
+<h2>Closest Match:
+  <span style='font-weight: 300'>
+    {#await calculateIdeology()}
+      Calculating...
+    {:then result}
+      {result}
+    {:catch error}
+      Unknown
+    {/await}
+  </span>
+</h2>
 <p>
   Ideological matching is a work in progress, and is much less accurate than the values and axes.
 </p>
 <p>
   You can send these results by copying and pasting the URL at the top of the page or using the
   image below. Think your matched ideology was wrong? Want to help us calibrate the test? Send the
-  results along with your political ideology to us at eightvalues@gmail.com, or send us any
-  comments, questions, or criticism.
+  results along with your political ideology to us at
+  <a href={'mailto:' + contact.email}>{contact.email}</a>,
+  or send us any comments, questions, or criticism.
 </p>
 <hr/>
-<button>Back</button>
+<button on:click={() => goto('/')}>Back</button>
 
 
 <style>
@@ -65,7 +146,6 @@
 }
 
 .bar {
-  width: 50%;
   height: 36pt;
   line-height: 36pt;
   padding: 8pt;
@@ -78,6 +158,7 @@
   border-color: #222222;
   background-color: #eeeeee;
   display: block;
+  width: 20%;
 }
 
 .text_wrapper {
