@@ -1,42 +1,26 @@
-<script context="module">
-  export function load({ page, }) {
-    let mapped = {};
-    for (const [key, value] of page.query) {
-      mapped[key] = value;
-    }
-    console.log(mapped);
-    return {
-      props: {
-        results: mapped,
-      }
-    };
-  }
-</script>
-
 <script>
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
   import Ideologies from '$lib/data/idealogies.json';
   import { resultsStore } from '$lib/resultsStore';
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
 
   const {
     values
   } = Values;
 
-  export let results;
-  console.log(results);
-  if (!results) {
-    results = {};
-    for (const value of values) {
-      results[value.slug] = '50.0';
-    }
-    if (Object.keys($resultsStore).length !== 0) {
-      console.log('Found store');
-      results = $resultsStore;
-    }
+  let results = {};
+  for (const value of values) {
+    results[value.slug] = '50.0';
   }
-
+  for (const [key, value] of $page.query) {
+    results[key] = value;
+  }
+  if (Object.keys($resultsStore).length !== 0) {
+    console.log('Found store');
+    results = $resultsStore;
+  }
 
 
   let complimentResults = {};
