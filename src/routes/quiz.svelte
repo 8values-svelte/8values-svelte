@@ -60,14 +60,14 @@
   }
 
   function calcResults() {
-    let results = {};
-    for (const [slug, subresult] in Object.entries(results)) {
+    let finalResults = {};
+    for (const [slug, subresult] of Object.entries(results)) {
       let total = subresult.reduce((acc, value) => acc += (value ? value : 0), 0);
-      results[slug] = (100 * (maxes[slug] + total) / (2 * maxes[slug])).toFixed(1);
+      finalResults[slug] = (100 * (maxes[slug] + total) / (2 * maxes[slug])).toFixed(1);
     }
-    resultsStore.set(results);
-    const query = '?' + Object.entries(results).map(([slug, value]) => slug + '=' + value).join('&');
-    goto('/results');
+    resultsStore.set(finalResults);
+    const query = '?' + Object.entries(finalResults).map(([slug, value]) => slug + '=' + value).join('&');
+    goto('/results' + query);
   }
 
   function previousQuestion() {

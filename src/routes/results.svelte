@@ -1,35 +1,45 @@
+<script context="module">
+  export function load({ page, }) {
+    let mapped = {};
+    for (const [key, value] of page.query) {
+      mapped[key] = value;
+    }
+    console.log(mapped);
+    return {
+      props: {
+        results: mapped,
+      }
+    };
+  }
+</script>
+
 <script>
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
   import Ideologies from '$lib/data/idealogies.json';
   import { resultsStore } from '$lib/resultsStore';
-  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   const {
     values
   } = Values;
 
-  const {
-    query
-  } = page;
-
-  let results = {};
-  let complimentResults = {};
-  for (const value of values) {
-    results[value.slug] = '50.0';
-  }
-  if (Object.keys($resultsStore).length !== 0) {
-    console.log('Found store');
-    results = $resultsStore;
-  }
-  if (query) {
-    console.log('Found query');
-    for (const [key, value] of query) {
-      results[key] = value;
+  export let results;
+  console.log(results);
+  if (!results) {
+    results = {};
+    for (const value of values) {
+      results[value.slug] = '50.0';
+    }
+    if (Object.keys($resultsStore).length !== 0) {
+      console.log('Found store');
+      results = $resultsStore;
     }
   }
 
+
+
+  let complimentResults = {};
   for (const [slug, value] of Object.entries(results)) {
     complimentResults[slug] = (100 - parseFloat(value)).toFixed(1);
   }
