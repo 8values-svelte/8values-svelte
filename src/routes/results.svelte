@@ -20,9 +20,11 @@
     results[value.slug] = "50.0"
   }
   if(Object.keys($resultsStore).length !== 0) {
+    console.log("Found store")
     results = $resultsStore;
   }
   if(query) {
+    console.log("Found query")
     for (const [key, value] of query) {
       results[key] = value;
     }
@@ -87,7 +89,7 @@
 </script>
 
 <svelte:head>
-  {name} Results
+  <title>{name} Results</title>
 </svelte:head>
 
 <h1>Results</h1>

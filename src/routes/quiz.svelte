@@ -51,11 +51,11 @@
     for (const [slug, value] of Object.entries(questionEffect)) {
       results[slug][questionNumber] = value * multiplier;
     }
-    console.log(results);
 
-    questionNumber += 1;
-    if (questionNumber >= questions.length) {
+    if (questionNumber + 1 >= questions.length) {
       calcResults();
+    } else {
+      questionNumber += 1;
     }
   }
 
@@ -67,7 +67,7 @@
     }
     resultsStore.set(results);
     const query = '?' + Object.entries(results).map(([slug, value]) => slug + '=' + value).join('&');
-    goto('/results' + query);
+    goto('/results');
   }
 
   function previousQuestion() {
