@@ -12,7 +12,7 @@ const config = {
   kit: {
     adapter: staticAdapter({}),
     paths: {
-      base: dev ? '' : '/8values-svelte',
+      base: dev ? '' : '/8values-svelte'
     },
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte'

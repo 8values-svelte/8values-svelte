@@ -2,7 +2,7 @@
   import Info from '$lib/data/info.json';
   import Values from '$lib/data/values.json';
   import Questions from '$lib/data/questions.json';
-  import { resultsStore } from '$lib/resultsStore'
+  import { resultsStore } from '$lib/resultsStore';
   import { goto } from '$app/navigation';
 
   const {
