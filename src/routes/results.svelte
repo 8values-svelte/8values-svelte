@@ -126,9 +126,8 @@
 <p>
   You can send these results by copying and pasting the URL at the top of the page or using the
   image below. Think your matched ideology was wrong? Want to help us calibrate the test? Send the
-  results along with your political ideology to us at
-  <a href={'mailto:' + contact.email}>{contact.email}</a>,
-  or send us any comments, questions, or criticism.
+  results along with your political ideology to us at {contact.email}, or send us any comments,
+  questions, or criticism.
 </p>
 <hr />
 <button on:click={() => goto('/')}>Back</button>

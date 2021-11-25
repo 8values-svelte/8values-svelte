@@ -133,11 +133,11 @@
 <p>
 <ul>
   <li>
-    Email: <a href={'mailto:' + contact.email}>{contact.email}</a>
+    Email: {contact.email}
   </li>
   {#if (contact.github)}
     <li>
-      Github: <a href={'https://github.com/' + contact.github}>@{contact.github}</a>
+      Github: <a href="https://github.com/{contact.github}">@{contact.github}</a>
     </li>
   {/if}
 </ul>
