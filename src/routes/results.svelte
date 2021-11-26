@@ -62,7 +62,7 @@
   } = Ideologies;
 
   async function calculateIdeology() {
-    let ideology = '';
+    let ideology = 'Unknown';
     let lowestDistance = Infinity;
     for (const { name, stats } of ideologies) {
       let dist = 0;

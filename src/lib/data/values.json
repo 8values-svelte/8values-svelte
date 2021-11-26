@@ -95,30 +95,6 @@
         "description": "Those with higher Progress scores believe in social change and rationality. Though not always, they are usually secular or atheist, and support environmental action and scientific or technological research.",
         "color": "#7b1fa2"
       }
-    },
-    {
-      "slug": "wungus",
-      "name": "Wungus",
-      "labels": [
-        "Communist",
-        "Socialist",
-        "Social",
-        "Centrist",
-        "Market",
-        "Capitalist",
-        "Laissez-Faire"
-      ],
-      "weight": 2,
-      "leftValue": {
-        "name": "equality",
-        "description": "Those with higher Equality scores believe the economy should distribute value evenly among the populace. They tend to support progressive tax codes, social programs, and at high values, socialism.",
-        "color": "#d32f2f"
-      },
-      "rightValue": {
-        "name": "markets",
-        "description": "Those with higher Market scores believe the economy should be focused on rapid growth. They tend to support lower taxes, privatization, deregulation, and at high values, laissez-faire capitalism.",
-        "color": "#00796b"
-      }
     }
   ]
 }
