@@ -5,6 +5,7 @@
   import { resultsStore } from '$lib/resultsStore';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import { onMount } from 'svelte';
 
   const {
     values
@@ -18,7 +19,6 @@
     results[key] = value;
   }
   if (Object.keys($resultsStore).length !== 0) {
-    console.log('Found store');
     results = $resultsStore;
   }
 
@@ -30,7 +30,9 @@
 
   const {
     name,
-    contact
+    version,
+    contact,
+    url,
   } = Info;
 
   function getLabel(labels, value) {
@@ -77,9 +79,131 @@
     return ideology;
   }
 
+  const barSectionHeight = 130;
+
+  function getImageWidth() {
+    return 800;
+  }
+
+  function getImageHeight() {
+    return 160 + (barSectionHeight * values.length);
+  }
+
+  let imageSrc = ''
   async function generateImage() {
     const c = document.createElement('canvas');
+    c.width = getImageWidth();
+    c.height = getImageHeight();
+
+    const ctx = c.getContext("2d");
+
+    ctx.fillStyle = "#EEEEEE";
+    ctx.fillRect(0, 0, 800, getImageHeight());
+
+
+
+    //Title
+    ctx.fillStyle = "#222222";
+    let titleSize = 81;
+    do {
+      titleSize -= 1;
+      ctx.font = "700 " + titleSize + "px Montserrat";
+    } while(ctx.measureText(name).width > 460)
+    const height = ctx.measureText(name).actualBoundingBoxAscent;
+    const expected = 59;
+    const offset = expected - height
+    ctx.textAlign = "left";
+    ctx.fillText(name, 20, 90 - offset);
+    //Ideology
+    ctx.font = "50px Montserrat";
+    ctx.fillText(await calculateIdeology(), 20, 140 - offset);
+    //url + version
+    ctx.textAlign = "right"
+    let urlSize = 31;
+    do {
+      urlSize -= 1;
+      ctx.font = "700 " + urlSize + "px Montserrat";
+    } while(ctx.measureText(url).width > 280)
+    ctx.fillText(url, 780, 60);
+    ctx.font = "30px Montserrat";
+    ctx.fillText(version, 780, 90);
+
+    for(const [index, result] of Object.entries(values)) {
+      const {
+        name,
+        slug,
+        labels,
+        leftValue,
+        rightValue,
+      } = result;
+
+      //Axis name
+      const capitalizedName = name[0].toUpperCase() + name.slice(1);
+      ctx.font = "300 30px Montserrat";
+      ctx.textAlign = "center";
+      ctx.fillText(capitalizedName + " Axis: " + getLabel(labels, parseFloat(results[slug])), 400, 172 + (index * barSectionHeight));
+
+      //left image
+      let leftImg = new Image();
+      leftImg.src = "icons/" + leftValue.name + ".svg";
+      ctx.drawImage(leftImg, 20, 170 + (index * barSectionHeight), 100, 100);
+      //right image
+      let rightImg = new Image();
+      rightImg.src = "icons/" + rightValue.name + ".svg";
+      ctx.drawImage(rightImg, 680, 170 + (index * barSectionHeight), 100, 100);
+
+      //background of bar
+      ctx.fillStyle = "#222222";
+      ctx.fillRect(120, 180 + (index * barSectionHeight), 560, 80);
+
+      //left bar
+      ctx.fillStyle = leftValue.color;
+      const leftSize = 5.6 * results[slug] - 2;
+      ctx.fillRect(120, 184 + (index * barSectionHeight), leftSize, 72);
+
+      //right bar
+      ctx.fillStyle = rightValue.color;
+      const rightSize = 5.6 * complimentResults[slug] - 2;
+      const rightPos = 680 - rightSize;
+      ctx.fillRect(rightPos, 184 + (index * barSectionHeight), rightSize, 72);
+
+      //percents
+      //left percent
+      if(results[slug] > 30) {
+        ctx.fillStyle = "#222222";
+        ctx.textAlign = "left";
+        ctx.font = "50px Montserrat";
+        ctx.fillText(results[slug] + "%", 130, 237.5 + (index * barSectionHeight));
+      }
+
+      if(complimentResults[slug] > 30) {
+        ctx.fillStyle = "#222222";
+        ctx.textAlign = "right";
+        ctx.font = "50px Montserrat";
+        ctx.fillText(complimentResults[slug] + "%", 670, 237.5 + (index * barSectionHeight));
+      }
+
+    }
+
+    //Uncomment for debug region prints
+    /*
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(500, 0, 1, 100);
+    ctx.fillRect(780, 0, 1, 100);
+    ctx.fillStyle = "#0000FF";
+    ctx.fillRect(20, 0, 1, 100);
+    ctx.fillRect(480, 0, 1, 100);
+    ctx.fillStyle = "#00FF00";
+    ctx.fillRect(0, 150, 700, 1);
+    ctx.fillRect(0, 280, 700, 1);
+     */
+
+    return c.toDataURL();
   }
+
+  onMount(async () => {
+    imageSrc = await generateImage();
+  })
 </script>
 
 <svelte:head>
@@ -130,6 +254,9 @@
   questions, or criticism.
 </p>
 <hr />
+<div class='image_out' style="width: {getImageWidth()}px; height: {getImageHeight()}px">
+  <img src={imageSrc} style='width: 100%; height: 100%'/>
+</div>
 <button on:click={() => goto('/')}>Back</button>
 
 
@@ -163,6 +290,15 @@
     line-height: 36pt;
     color: #222222;
     display: inline-block;
+  }
+
+  .image_out {
+    margin: auto;
+    border-color: #444444;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 8pt;
+    overflow: hidden;
   }
 
   img {
